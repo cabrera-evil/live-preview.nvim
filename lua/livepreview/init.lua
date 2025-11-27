@@ -53,6 +53,7 @@ function M.start(filepath, port)
 	M.close()
 
 	M.serverObj = server.Server:new(config.config.dynamic_root and vim.fs.dirname(filepath) or nil)
+	local filetype = utils.supported_filetype(filepath)
 	vim.wait(50, function()
 		local function onTextChanged(client)
 			local bufname = vim.api.nvim_buf_get_name(0)
@@ -67,23 +68,42 @@ function M.start(filepath, port)
 			server.websocket.send_json(client, message)
 		end
 
-		M.serverObj:start(config.config.address, port, {
-			on_events = utils.supported_filetype(filepath) == "html"
-					and {
-						---@param client uv_tcp_t
-						---@param data {filename: string, event: FsEvent}
-						LivePreviewDirChanged = function(client, data)
-							if not vim.regex([[\.\(html\|css\|js\)$]]):match_str(data.filename) then
-								return
-							end
+		local on_events
+		if filetype == "html" then
+			on_events = {
+				---@param client uv_tcp_t
+				---@param data {filename: string, event: FsEvent}
+				LivePreviewDirChanged = function(client, data)
+					if not vim.regex([[\.\(html\|css\|js\)$]]):match_str(data.filename) then
+						return
+					end
 
-							server.websocket.send_json(client, { type = "reload" })
-						end,
-					}
-				or {
-					TextChanged = vim.schedule_wrap(onTextChanged),
-					TextChangedI = vim.schedule_wrap(onTextChanged),
-				},
+					server.websocket.send_json(client, { type = "reload" })
+				end,
+			}
+		elseif filetype == "hbs" then
+			on_events = {
+				---@param client uv_tcp_t
+				---@param data {filename: string, event: FsEvent}
+				LivePreviewDirChanged = function(client, data)
+					if not vim.regex([[\.\(hbs\|handlebars\|json\)$]]):match_str(data.filename) then
+						return
+					end
+
+					server.websocket.send_json(client, { type = "reload" })
+				end,
+				TextChanged = vim.schedule_wrap(onTextChanged),
+				TextChangedI = vim.schedule_wrap(onTextChanged),
+			}
+		else
+			on_events = {
+				TextChanged = vim.schedule_wrap(onTextChanged),
+				TextChangedI = vim.schedule_wrap(onTextChanged),
+			}
+		end
+
+		M.serverObj:start(config.config.address, port, {
+			on_events = on_events,
 		})
 
 		return true

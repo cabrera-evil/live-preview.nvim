@@ -86,7 +86,7 @@ function M.serve_file(client, file_path, if_none_match)
 		local filetype = supported_filetype(file_path)
 		if filetype then
 			if filetype ~= "html" then
-				body = toHTML(body, filetype)
+				body = toHTML(body, filetype, file_path)
 			else
 				body = handle_body(body)
 			end
