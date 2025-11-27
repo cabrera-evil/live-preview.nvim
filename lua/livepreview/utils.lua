@@ -41,6 +41,8 @@ function M.supported_filetype(file_name)
 		return "markdown"
 	elseif file_name:match("%.adoc$") or file_name:match("%.asciidoc$") then
 		return "asciidoc"
+	elseif file_name:match("%.hbs$") or file_name:match("%.handlebars$") then
+		return "hbs"
 	elseif file_name:match("%.svg$") then
 		return "svg"
 	end
