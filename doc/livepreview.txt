@@ -1,7 +1,8 @@
 *livepreview.txt*             For Nvim >=0.10.1
 
-Author: Phạm Bình An
-Upstream: https://github.com/brianhuster/live-preview.nvim
+Author: Phạm Bình An (Original), cabrera-evil (Fork maintainer)
+Upstream: https://github.com/cabrera-evil/live-preview.nvim
+Original: https://github.com/brianhuster/live-preview.nvim
 Copyright: (C) 2024 Phạm Bình An
 License: GPL-3.0 <https://www.gnu.org/licenses/gpl-3.0.html>
 
@@ -17,7 +18,10 @@ updates. No external dependencies or runtime like NodeJS or Python are
 required, since the backend is fully written in Lua and Neovim’s built-in
 functions.
 
-Link to repo https://github.com/brianhuster/live-preview.nvim
+This is a fork of the original project by Phạm Bình An, maintained by
+cabrera-evil. Link to repo https://github.com/cabrera-evil/live-preview.nvim
+
+Original project: https://github.com/brianhuster/live-preview.nvim
 
 ==============================================================================
 2. Configuration
@@ -78,6 +82,26 @@ example >vim
 - To see document about each subcommand, use the command: >vim
     :LivePreview help
 <
+
+						*livepreview-keybindings*
+RECOMMENDED KEYBINDINGS ~
+
+For quick access to LivePreview functionality, consider adding these keybindings
+to your Neovim configuration: >lua
+
+    -- Recommended keybindings for LivePreview
+    vim.keymap.set('n', '<leader>lp', ':LivePreview start<CR>', { desc = 'Start Live Preview' })
+    vim.keymap.set('n', '<leader>ls', ':LivePreview close<CR>', { desc = 'Stop Live Preview' })
+    vim.keymap.set('n', '<leader>lf', ':LivePreview pick<CR>', { desc = 'Pick file to preview' })
+<
+Or in Vimscript: >vim
+
+    " Recommended keybindings for LivePreview
+    nnoremap <leader>lp :LivePreview start<CR>
+    nnoremap <leader>ls :LivePreview close<CR>
+    nnoremap <leader>lf :LivePreview pick<CR>
+<
+
 Has a range of options (Telescope, fzf-lua, mini.pick,
 snacks.nvim or vim.ui.select as fallback). If
 you have multiple pickers installed, you can specify the picker to use by
@@ -188,15 +212,14 @@ See |livepreview-changelog|
 
 
 ==============================================================================
-6. BUY ME A COFFEE!
+6. SUPPORT THE PROJECT!
 							    *livepreview-donate*
 
-Maintaining this project takes time and effort, especially as I am a student
-now. If you find this project helpful, please consider supporting me
+Maintaining and improving this fork takes time and effort. If you find this
+project helpful, please consider supporting the ongoing development:
 
-PAYPAL <https://paypal.me/brianphambinhan>
+PAYPAL <https://www.paypal.com/paypalme/cabreraevil>
 
-VIETQR (Việt Nam)
-<https://img.vietqr.io/image/mb-9704229209586831984-print.png?addInfo=Donate%20for%20livepreview%20plugin%20nvim&accountName=PHAM%20BINH%20AN>
+BUY ME A COFFEE <https://buymeacoffee.com/cabrera.dev>
 
 vim:tw=78:ts=8:noet:ft=help:norl:

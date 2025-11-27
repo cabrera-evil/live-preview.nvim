@@ -1,89 +1,133 @@
-# Introduction :wave:
+<div align="center">
 
-[![LuaRocks](https://img.shields.io/luarocks/v/brianhuster/live-preview.nvim?logo=lua&color=purple)](https://luarocks.org/modules/brianhuster/live-preview.nvim)
+# 🌐 Live Preview for Neovim
 
-live-preview.nvim is a plugin for Neovim that allows you to view [Markdown](https://en.wikipedia.org/wiki/Markdown), [HTML](https://en.wikipedia.org/wiki/HTML) (along with CSS, JavaScript), [AsciiDoc](https://asciidoc.org/) and [SVG](https://en.wikipedia.org/wiki/SVG) files in a web browser with live updates. No external dependencies or runtime like NodeJS or Python are required, since the backend is fully written in Lua and Neovim's built-in functions.
+**Professional real-time preview for Markdown, HTML, AsciiDoc & SVG**
 
-# Features :sparkles:
- 
-* Preview Markdown, AsciiDoc, SVG with live updates as you type 
-* Preview HTML (with CSS and JavaScript) with live updates as you save the file
-* Supports KaTeX and Mermaid for rendering math equations and diagrams in Markdown and AsciiDoc files
-* Syntax highlighting for code blocks in Markdown and AsciiDoc 🖍️
-* Supports sync scrolling in the browser as you scroll in the Markdown files in Neovim. 
-* Integration with [`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim) 🔭, [`fzf-lua`](https://github.com/ibhagwan/fzf-lua), [`mini.pick`](https://github.com/echasnovski/mini.pick) and `vim.ui.select` meaning pickers like [`snacks.nvim`](https://gothub.com/folke/snacks.nvim) is supported
+[![Lua](https://img.shields.io/badge/Made%20with-Lua-blueviolet.svg?style=for-the-badge&logo=lua)](https://lua.org)
+[![Neovim](https://img.shields.io/badge/Neovim-%E2%89%A50.10.1-green.svg?style=for-the-badge&logo=neovim)](https://neovim.io)
+[![License](https://img.shields.io/github/license/cabrera-evil/live-preview.nvim?style=for-the-badge)](LICENSE.md)
 
-# Updates :loudspeaker:
- 
-See [RELEASE.md](RELEASE.md) 
+_Forked from [brianhuster/live-preview.nvim](https://github.com/brianhuster/live-preview.nvim)_
 
-**⚠️ Important Notice:** You should clear the cache of the browser after updating to ensure the plugin works correctly.
+</div>
 
-# Demo video :movie_camera:
- 
+---
+
+**live-preview.nvim** is a powerful Neovim plugin that provides instant browser preview for [Markdown](https://en.wikipedia.org/wiki/Markdown), [HTML](https://en.wikipedia.org/wiki/HTML), [AsciiDoc](https://asciidoc.org/) and [SVG](https://en.wikipedia.org/wiki/SVG) files with live updates as you type. Built entirely in Lua with zero external dependencies—no NodeJS, Python, or external runtimes required.
+
+## ✨ Features
+
+- **⚡ Real-time Preview**: Instant browser updates as you type (Markdown, AsciiDoc, SVG)
+- **🔄 Auto-refresh HTML**: Live updates on file save for HTML with CSS/JavaScript
+- **🧮 Math & Diagrams**: Built-in KaTeX and Mermaid support for equations and flowcharts
+- **🎨 Syntax Highlighting**: Beautiful code block rendering in previews
+- **📍 Synchronized Scrolling**: Browser automatically scrolls with your Neovim cursor
+- **🔍 Picker Integration**: Works seamlessly with:
+  - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
+  - [fzf-lua](https://github.com/ibhagwan/fzf-lua)
+  - [mini.pick](https://github.com/echasnovski/mini.pick)
+  - [snacks.nvim](https://github.com/folke/snacks.nvim)
+  - Native `vim.ui.select`
+
+## 🚀 Quick Start
+
+### Essential Commands
+
+Add these convenient keybindings to your configuration:
+
+```lua
+-- Recommended keybindings for quick access
+vim.keymap.set('n', '<leader>lp', ':LivePreview start<CR>', { desc = 'Start Live Preview' })
+vim.keymap.set('n', '<leader>ls', ':LivePreview close<CR>', { desc = 'Stop Live Preview' })
+vim.keymap.set('n', '<leader>lf', ':LivePreview pick<CR>', { desc = 'Pick file to preview' })
+```
+
+### Core Commands
+
+- `:LivePreview start` — Begin live preview for current file
+- `:LivePreview close` — Stop the preview server
+- `:LivePreview pick` — Select file to preview with picker
+
+## 📽️ Demo
+
 https://github.com/user-attachments/assets/865112c1-8514-4920-a531-b2204194f749
 
-# Installation :package:
+## 📋 Release Notes
 
-**Requirements** 
+See [RELEASE.md](RELEASE.md) for detailed changelog.
 
-- Neovim >=0.10.1
-- A modern web browser 
-- PowerShell (only if you use Windows) 
- 
-You can install this plugin using a plugin manager. Most plugin managers are supported. Below are some examples
+> **⚠️ Note:** Clear your browser cache after updates to ensure proper functionality.
+
+## 📦 Installation
+
+### Prerequisites
+
+| Requirement        | Version  | Platform     |
+| ------------------ | -------- | ------------ |
+| **Neovim**         | ≥ 0.10.1 | All          |
+| **Modern Browser** | Any      | All          |
+| **PowerShell**     | Any      | Windows only |
+
+### Package Managers
 
 <details>
-<summary>Using lazy.nvim (recommended) 💤</summary>
+<summary><b>lazy.nvim</b> (Recommended)</summary>
 
 ```lua
 {
-    'brianhuster/live-preview.nvim',
+    'cabrera-evil/live-preview.nvim',
     dependencies = {
-        -- You can choose one of the following pickers
-        'nvim-telescope/telescope.nvim',
-        'ibhagwan/fzf-lua',
-        'echasnovski/mini.pick',
-		'folke/snacks.nvim',
+        -- Choose your preferred picker (optional)
+        'nvim-telescope/telescope.nvim',     -- OR
+        'ibhagwan/fzf-lua',                  -- OR
+        'echasnovski/mini.pick',             -- OR
+        'folke/snacks.nvim',                 -- OR
     },
+    keys = {
+        { '<leader>lp', ':LivePreview start<CR>', desc = 'Start Live Preview' },
+        { '<leader>ls', ':LivePreview close<CR>', desc = 'Stop Live Preview' },
+        { '<leader>lf', ':LivePreview pick<CR>', desc = 'Pick file to preview' },
+    },
+    config = function()
+        -- Optional: Additional configuration
+        require('livepreview.config').set({
+            port = 5500,
+            browser = 'default',
+            dynamic_root = false,
+            sync_scroll = true,
+        })
+    end,
 }
 ```
 
 </details>
 
 <details>
-<summary>mini.deps 📦</summary>
+<summary><b>mini.deps</b></summary>
 
 ```lua
 MiniDeps.add({
-    source = 'brianhuster/live-preview.nvim',
-    depends = { 
-        -- You can choose one of the following pickers
+    source = 'cabrera-evil/live-preview.nvim',
+    depends = {
+        -- Optional picker dependencies
         'nvim-telescope/telescope.nvim',
         'ibhagwan/fzf-lua',
         'echasnovski/mini.pick',
-		'folke/snacks.nvim',
-    }, 
+        'folke/snacks.nvim',
+    },
 })
 ```
 
 </details>
 
 <details>
-<summary>rocks.nvim 🪨</summary>
+<summary><b>vim-plug</b></summary>
 
 ```vim
-:Rocks install live-preview.nvim
-```
-</details>
+Plug 'cabrera-evil/live-preview.nvim'
 
-<details>
-<summary>vim-plug 🔌</summary>
-
-```vim
-Plug 'brianhuster/live-preview.nvim'
-
-" You can choose one of the following pickers
+" Optional picker support
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'ibhagwan/fzf-lua'
 Plug 'echasnovski/mini.pick'
@@ -93,78 +137,120 @@ Plug 'folke/snacks.nvim'
 </details>
 
 <details>
-<summary>Native package (without a plugin manager) 📦</summary>
+<summary><b>Manual Installation</b></summary>
 
-```sh
-git clone --depth 1 https://github.com/brianhuster/live-preview.nvim ~/.local/share/nvim/site/pack/brianhuster/start/live-preview.nvim
-nvim -c 'helptags ~/.local/share/nvim/site/pack/brianhuster/start/live-preview.nvim/doc' -c 'q'
+```bash
+# Clone the repository
+git clone --depth 1 https://github.com/cabrera-evil/live-preview.nvim \
+    ~/.local/share/nvim/site/pack/live-preview/start/live-preview.nvim
+
+# Generate help tags
+nvim -c 'helptags ~/.local/share/nvim/site/pack/live-preview/start/live-preview.nvim/doc' -c 'q'
 ```
 
 </details>
 
-You may need to run `helptags ALL` in Neovim to generate the help tags, if your plugin manager does not do it for you.
+> **Note:** Run `:helptags ALL` if your plugin manager doesn't automatically generate help tags.
 
-### Note for HTML
+### 📝 HTML Auto-save Setup
 
-This plugin supports live-previewing Markdown, AsciiDoc and SVG files without the need to save the file. However, for HTML files, the preview will only be updated when you save the file. 
+HTML files require saving to trigger preview updates. Enable auto-save for seamless editing:
 
-You can create an autocmd that auto save the file when you leave insert mode.
+<details>
+<summary><b>Lua Configuration</b></summary>
 
 ```lua
---- Lua
-vim.o.autowriteall = true
+-- Enable auto-save for HTML files
+vim.opt.autowriteall = true
 vim.api.nvim_create_autocmd({ 'InsertLeavePre', 'TextChanged', 'TextChangedP' }, {
-    pattern = '*', callback = function()
+    pattern = '*.html',
+    callback = function()
         vim.cmd('silent! write')
-    end
+    end,
+    desc = 'Auto-save HTML files for live preview'
 })
 ```
 
+</details>
+
+<details>
+<summary><b>Vimscript Configuration</b></summary>
+
 ```vim
-" Vimscript
+" Enable auto-save for HTML files
 set autowriteall
-autocmd InsertLeavePre,TextChanged,TextChangedP * silent! write
+autocmd InsertLeavePre,TextChanged,TextChangedP *.html silent! write
 ```
 
-# Configuration, usage, FAQ
+</details>
 
-You can configure this plugin by passing a table to the Lua function
+## ⚙️ Configuration
+
+Configure the plugin using the setup function:
+
 ```lua
-require('livepreview.config').set()
+require('livepreview.config').set({
+    port = 5500,                    -- Preview server port
+    browser = 'default',            -- Browser command ('firefox', 'chrome', etc.)
+    dynamic_root = false,           -- Use parent dir of current file as root
+    sync_scroll = true,             -- Sync browser scroll with Neovim
+    picker = 'telescope',           -- Preferred picker: 'telescope', 'fzf-lua', 'mini.pick', 'snacks'
+    address = '127.0.0.1',         -- Server bind address
+})
 ```
 
-See [`:h livepreview`](./doc/livepreview.txt) for all configurations options, as well as usage and FAQ.
+For comprehensive documentation, see [`:h livepreview`](./doc/livepreview.txt).
 
-# Contributing :handshake:
- 
-Since this is a young project, there should be a lot of rooms for improvements. If you would like to contribute to this project, please feel free to open an issue or a pull request.
+## 🤝 Contributing
 
-# Roadmap :rocket:
+We welcome contributions to improve live-preview.nvim! Whether it's bug reports, feature requests, or code contributions, your help is appreciated.
 
-See [TODO](https://github.com/brianhuster/live-preview.nvim/milestone/1)
+### How to Contribute
 
-# Acknowledgements 🙏
+1. **Fork** the repository
+2. **Create** a feature branch
+3. **Make** your changes
+4. **Test** thoroughly
+5. **Submit** a pull request
 
-* [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) and [Live Preview](https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server) for the idea inspiration
-* [glacambre/firenvim](https://github.com/glacambre/firenvim) for the sha1 function reference
-* [sindresorhus/github-markdown-css](https://github.com/sindresorhus/github-markdown-css) CSS style for Markdown files
-* [markdown-it/markdown-it](https://github.com/markdown-it/markdown-it) for parsing Markdown files
-* [asciidoctor/asciidoctor.js](https://github.com/asciidoctor/asciidoctor.js) for parsing AsciiDoc files
-* [KaTeX](https://github.com/KaTeX/KaTeX) for rendering math equations
-* [mermaid-js/mermaid](https://github.com/mermaid-js/mermaid) for rendering diagrams
-* [digitalmoksha/markdown-it-inject-linenumbers](https://github.com/digitalmoksha/markdown-it-inject-linenumbers) : A markdown-it plugin for injecting line numbers into html output
+## 🎯 Roadmap
 
-# Buy me a coffee ☕
+See our [project milestones](https://github.com/cabrera-evil/live-preview.nvim/milestones) for planned features and improvements.
 
-Maintaining this project takes time and effort, especially as I am a student now. If you find this project helpful, please consider supporting me :>
+## 🙏 Acknowledgements
 
-<a href="https://paypal.me/brianphambinhan">
-    <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" alt="Paypal" style="height: 69px;">
-</a>
-<a href="https://img.vietqr.io/image/mb-9704229209586831984-print.png?addInfo=Donate%20for%20livepreview%20plugin%20nvim&accountName=PHAM%20BINH%20AN">
-    <img src="https://github.com/user-attachments/assets/f28049dc-ce7c-4975-a85e-be36612fd061" alt="VietQR" style="height: 85px;">
-</a>
+This project builds upon excellent open-source work:
 
-# Alternatives
+### Original Project
 
-See [Wiki](https://github.com/brianhuster/live-preview.nvim/wiki/Alternatives-to-live%E2%80%90preview.nvim) for alternatives to live-preview.nvim
+- **[brianhuster/live-preview.nvim](https://github.com/brianhuster/live-preview.nvim)** - Original implementation and core architecture
+
+### Inspiration & Dependencies
+
+- **[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)** & **[Live Preview](https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server)** - VSCode extensions that inspired this project
+- **[glacambre/firenvim](https://github.com/glacambre/firenvim)** - SHA1 function implementation reference
+- **[sindresorhus/github-markdown-css](https://github.com/sindresorhus/github-markdown-css)** - Beautiful GitHub-style CSS for Markdown
+- **[markdown-it/markdown-it](https://github.com/markdown-it/markdown-it)** - Robust Markdown parser
+- **[asciidoctor/asciidoctor.js](https://github.com/asciidoctor/asciidoctor.js)** - AsciiDoc processing engine
+- **[KaTeX](https://github.com/KaTeX/KaTeX)** - Fast math typesetting library
+- **[mermaid-js/mermaid](https://github.com/mermaid-js/mermaid)** - Diagram and flowchart generation
+- **[digitalmoksha/markdown-it-inject-linenumbers](https://github.com/digitalmoksha/markdown-it-inject-linenumbers)** - Line number injection for enhanced scrolling
+
+## 💖 Support the Project
+
+If you find this fork useful, consider supporting the ongoing maintenance and development:
+
+<div align="center">
+
+[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/paypalme/cabreraevil)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/cabrera.dev)
+
+</div>
+
+---
+
+<div align="center">
+
+**Star ⭐ this repository if you find it useful!**
+
+</div>
