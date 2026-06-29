@@ -95,6 +95,20 @@ function M.start(filepath, port)
 				TextChanged = vim.schedule_wrap(onTextChanged),
 				TextChangedI = vim.schedule_wrap(onTextChanged),
 			}
+		elseif filetype == "ejs" then
+			on_events = {
+				---@param client uv_tcp_t
+				---@param data {filename: string, event: FsEvent}
+				LivePreviewDirChanged = function(client, data)
+					if not vim.regex([[\.\(ejs\|json\)$]]):match_str(data.filename) then
+						return
+					end
+
+					server.websocket.send_json(client, { type = "reload" })
+				end,
+				TextChanged = vim.schedule_wrap(onTextChanged),
+				TextChangedI = vim.schedule_wrap(onTextChanged),
+			}
 		else
 			on_events = {
 				TextChanged = vim.schedule_wrap(onTextChanged),
